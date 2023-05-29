@@ -9,12 +9,11 @@ import { getAuth, signOut } from "firebase/auth";
 import AuthContext from "context/AuthContext";
 import PostBox from "components/posts/PostBox";
 import PostForm from "components/posts/PostForm";
+import { Link } from "react-router-dom";
 
 export interface PostProps {
   id: string;
-  title: string;
   email: string;
-  summary: string;
   content: string;
   createdAt: string;
   uid: string;
@@ -52,6 +51,8 @@ export default function HomePage() {
       >
         로그아웃
       </button>
+      <br />
+      <Link to="/profile">프로필</Link>
       <br />
       <br />
       <PostForm />

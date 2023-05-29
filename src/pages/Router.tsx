@@ -2,6 +2,9 @@ import { Route, Routes, Navigate } from "react-router-dom";
 import LoginPage from "./login";
 import SigninPage from "./signin";
 import HomePage from "./home";
+import PostDetailPage from "./posts/detail";
+import PostEditPage from "./posts/edit";
+import ProfilePage from "./profile";
 
 interface RouterProps {
   isAuthenticated: boolean;
@@ -13,11 +16,9 @@ export default function Router({ isAuthenticated }: RouterProps) {
       {isAuthenticated ? (
         <>
           <Route path="/" element={<HomePage />} />
-          <Route path="/posts" element={<h2>Post List Page</h2>} />
-          <Route path="/posts/:id" element={<h2>Post Detail Page</h2>} />
-          <Route path="/posts/new" element={<h2>Post New Page</h2>} />
-          <Route path="/posts/edit/:id" element={<h2>Post Edit Page</h2>} />
-          <Route path="/profile" element={<h2>Profile Page</h2>} />
+          <Route path="/posts/:id" element={<PostDetailPage />} />
+          <Route path="/posts/edit/:id" element={<PostEditPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
           <Route path="*" element={<Navigate replace to="/" />} />
         </>
       ) : (
