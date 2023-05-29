@@ -63,35 +63,51 @@ export default function SignupForm() {
     }
   };
 
+  const onClickSocialLogin = (e: any) => {
+    console.log(e.target.name);
+  };
+
   return (
-    <form onSubmit={onSubmit} className="Form Form--lg">
-      <h1 className="Form__title">회원가입</h1>
-      <div className="Form__block">
-        <label htmlFor="email">이메일</label>
-        <input type="text" name="email" id="email" required value={email} onChange={onChange} />
-      </div>
-      <div className="Form__block">
-        <label htmlFor="password">비밀번호</label>
-        <input type="password" name="password" id="password" required value={password} onChange={onChange} />
-      </div>
-      <div className="Form__block">
-        <label htmlFor="password_confirmation">비밀번호 확인</label>
-        <input type="password" name="password_confirmation" id="password_confirmation" required value={passwordConfirmation} onChange={onChange} />
-      </div>
-      {error && error?.length > 0 && (
+    <>
+      <form onSubmit={onSubmit} className="Form Form--lg">
+        <h1 className="Form__title">회원가입</h1>
         <div className="Form__block">
-          <div className="Form__error">{error}</div>
+          <label htmlFor="email">이메일</label>
+          <input type="text" name="email" id="email" required value={email} onChange={onChange} />
         </div>
-      )}
-      <div className="Form__block">
-        계정이 있으신가요?
-        <Link className="Form__link" to="/login">
-          로그인하기
-        </Link>
+        <div className="Form__block">
+          <label htmlFor="password">비밀번호</label>
+          <input type="password" name="password" id="password" required value={password} onChange={onChange} />
+        </div>
+        <div className="Form__block">
+          <label htmlFor="password_confirmation">비밀번호 확인</label>
+          <input type="password" name="password_confirmation" id="password_confirmation" required value={passwordConfirmation} onChange={onChange} />
+        </div>
+        {error && error?.length > 0 && (
+          <div className="Form__block">
+            <div className="Form__error">{error}</div>
+          </div>
+        )}
+        <div className="Form__block">
+          계정이 있으신가요?
+          <Link className="Form__link" to="/login">
+            로그인하기
+          </Link>
+        </div>
+        <div className="Form__block--lg">
+          <input type="submit" value="회원가입" className="Form__btn-submit" disabled={error?.length > 0} />
+        </div>
+      </form>
+      <div>
+        <button type="button" name="google" onClick={onClickSocialLogin}>
+          Google로 회원가입
+        </button>
       </div>
-      <div className="Form__block--lg">
-        <input type="submit" value="회원가입" className="Form__btn-submit" disabled={error?.length > 0} />
+      <div>
+        <button type="button" name="github" onClick={onClickSocialLogin}>
+          Github로 회원가입
+        </button>
       </div>
-    </form>
+    </>
   );
 }

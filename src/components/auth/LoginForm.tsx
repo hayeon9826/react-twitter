@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { app } from "firebaseApp";
 import { toast } from "react-toastify";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, GithubAuthProvider, signInWithPopup } from "firebase/auth";
 
 export default function LoginForm() {
   const [error, setError] = useState<string>("");
@@ -49,6 +49,39 @@ export default function LoginForm() {
     }
   };
 
+  const onClickSocialLogin = async (e: any) => {
+    const {
+      target: { name, value },
+    } = e;
+    let provider;
+    const auth = getAuth(app);
+
+    if (name === "google") {
+      provider = new GoogleAuthProvider();
+    }
+
+    if (name === "github") {
+      provider = new GithubAuthProvider();
+    }
+
+    const data = signInWithPopup(auth, provider as GithubAuthProvider | GoogleAuthProvider)
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential?.accessToken;
+        // The signed-in user info.
+        const user = result.user;
+        console.log(credential, token, user);
+        // IdP data available using getAdditionalUserInfo(result)
+        // ...
+      })
+      .catch((error) => {
+        console.log(error);
+        const errorMessage = error.message;
+        toast.error(errorMessage);
+      });
+  };
+
   return (
     <>
       <form onSubmit={onSubmit} className="Form Form--lg">
@@ -76,6 +109,16 @@ export default function LoginForm() {
           <input type="submit" value="로그인" className="Form__btn-submit" disabled={error?.length > 0} />
         </div>
       </form>
+      <div>
+        <button type="button" name="google" onClick={onClickSocialLogin}>
+          Google로 로그인
+        </button>
+      </div>
+      <div>
+        <button type="button" name="github" onClick={onClickSocialLogin}>
+          Github로 로그인
+        </button>
+      </div>
     </>
   );
 }
