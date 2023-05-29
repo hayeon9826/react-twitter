@@ -1,4 +1,4 @@
-import { useContext, useState, useRef } from "react";
+import { useContext, useState } from "react";
 
 import { db, app } from "firebaseApp";
 import { collection, addDoc } from "firebase/firestore";
@@ -14,19 +14,21 @@ export default function PostForm() {
   const auth = getAuth(app);
   const { user } = useContext(AuthContext);
   const storage = getStorage();
-  const fileRef = useRef<HTMLInputElement | null>(null);
 
   const onSubmit = async (e: any) => {
-    const key = `${user?.uid}/${uuidv4()}`;
+    let key = `${user?.uid}/${uuidv4()}`;
     const storageRef = ref(storage, key);
 
     e.preventDefault();
     try {
       let imageUrl = "";
+      let imageKey = "";
       // image 먼저 업로드
       if (imageFile) {
         const data = await uploadString(storageRef, imageFile, "data_url");
+        console.log(data?.metadata?.name);
         imageUrl = await getDownloadURL(data?.ref);
+        imageKey = data?.metadata?.name;
       }
 
       // image url 받아서 addDoc
@@ -35,6 +37,7 @@ export default function PostForm() {
         createdAt: new Date()?.toLocaleDateString(),
         email: auth?.currentUser?.email,
         imageUrl: imageUrl,
+        imageKey: imageKey,
         uid: user?.uid,
       });
 
@@ -58,7 +61,6 @@ export default function PostForm() {
   };
 
   const handleFileUpload = (e: any) => {
-    console.log(e.target.files);
     const {
       target: { files },
     } = e;
@@ -79,7 +81,7 @@ export default function PostForm() {
   return (
     <form onSubmit={onSubmit} className="Form">
       <textarea name="content" id="content" required placeholder="tweet" value={content} onChange={onChange} />
-      <input type="file" accept="image/*" onChange={handleFileUpload} ref={fileRef} />
+      <input type="file" accept="image/*" onChange={handleFileUpload} />
       {imageFile && (
         <div>
           <img src={imageFile} alt="attachment" width={100} height={100} />

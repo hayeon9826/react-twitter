@@ -1,6 +1,7 @@
 import { useCallback, useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { deleteDoc, doc, getDoc } from "firebase/firestore";
+import { getStorage, ref, deleteObject } from "firebase/storage";
 
 import { db } from "firebaseApp";
 import { PostProps } from "pages/home";
@@ -14,9 +15,17 @@ export default function PostDetailPage() {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  const storage = getStorage();
+  const imageRef = ref(storage, post?.imageUrl);
+
   const handleDelete = async () => {
     const confirm = window.confirm("해당 게시글을 삭제하시겠습니까?");
     if (confirm && post) {
+      if (post?.imageUrl) {
+        deleteObject(imageRef).catch((error) => {
+          console.log(error);
+        });
+      }
       await deleteDoc(doc(db, "posts", post.id));
       navigate("/");
       toast.success("게시글을 삭제했습니다.");
