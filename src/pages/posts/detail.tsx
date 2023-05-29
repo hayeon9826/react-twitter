@@ -60,6 +60,7 @@ export default function PostDetailPage() {
 
           <br />
           <div className="Post__text--pre-wrap">{post?.content}</div>
+          {post?.imageUrl && <img src={post?.imageUrl} width={100} height={100} alt="post img" />}
         </div>
       ) : (
         "loading"

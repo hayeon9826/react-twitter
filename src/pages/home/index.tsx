@@ -17,6 +17,7 @@ export interface PostProps {
   content: string;
   createdAt: string;
   uid: string;
+  imageUrl?: string;
 }
 
 export default function HomePage() {

@@ -30,6 +30,7 @@ export default function PostBox({ index, post, user }: PostBoxProps) {
         </div>
       </Link>
       <b className="Post__title">{post?.content}</b>
+      {post?.imageUrl && <img src={post?.imageUrl} width={100} height={100} alt="post img" />}
       <div className="Post__utils-box">
         {user?.uid === post?.uid && (
           <>
