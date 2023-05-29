@@ -3,8 +3,10 @@ import { PostProps } from "pages/home";
 import { User } from "firebase/auth";
 import { toast } from "react-toastify";
 import { db } from "firebaseApp";
-import { doc, deleteDoc } from "firebase/firestore";
+import { doc, deleteDoc, updateDoc, arrayUnion, getDoc, arrayRemove } from "firebase/firestore";
 import { getStorage, ref, deleteObject } from "firebase/storage";
+import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import { FaRegComment } from "react-icons/fa";
 
 interface PostBoxProps {
   index: number;
@@ -26,6 +28,24 @@ export default function PostBox({ index, post, user }: PostBoxProps) {
       }
       await deleteDoc(doc(db, "posts", post.id));
       toast.success("게시글을 삭제했습니다.");
+    }
+  };
+
+  const toggleLike = async () => {
+    const postRef = doc(db, "posts", post?.id);
+
+    if (user?.uid && post?.likes?.includes(user?.uid)) {
+      await updateDoc(postRef, {
+        likes: arrayRemove(user?.uid),
+        likeCount: post?.likeCount ? post?.likeCount - 1 : 0,
+        updatedAt: new Date()?.toLocaleDateString(),
+      });
+    } else {
+      await updateDoc(postRef, {
+        likes: arrayUnion(user?.uid),
+        likeCount: post?.likeCount ? post?.likeCount + 1 : 1,
+        updatedAt: new Date()?.toLocaleDateString(),
+      });
     }
   };
 
@@ -51,16 +71,29 @@ export default function PostBox({ index, post, user }: PostBoxProps) {
         </div>
       )}
       <div className="px-4 mt-2">
-        {user?.uid === post?.uid && (
-          <div className="text-sm flex gap-2 flex-row-reverse">
-            <button type="button" className="cursor-pointer text-black dark:text-white hover:text-red-600 focus:text-red-600" onClick={handleDelete}>
-              삭제
-            </button>
-            <button type="button" className="text-gray-600 hover:text-black dark:text-gray-200 dark:hover:text-white dark:focus:text-white focus:text-black">
-              <Link to={`/posts/edit/${post?.id}`}>수정</Link>
-            </button>
-          </div>
-        )}
+        <div className="text-sm flex gap-2 flex-row-reverse">
+          {user?.uid === post?.uid && (
+            <>
+              <button type="button" className="cursor-pointer text-black dark:text-white hover:text-red-600 focus:text-red-600" onClick={handleDelete}>
+                삭제
+              </button>
+              <button type="button" className="text-gray-600 hover:text-black dark:text-gray-200 dark:hover:text-white dark:focus:text-white focus:text-black">
+                <Link to={`/posts/edit/${post?.id}`}>수정</Link>
+              </button>
+            </>
+          )}
+          <button
+            type="button"
+            className="cursor-pointer text-sm flex gap-2 items-center text-gray-500 dark:text-gray-20 hover:text-red-600 focus:text-red-600"
+            onClick={toggleLike}
+          >
+            {user?.uid && post?.likes?.includes(user?.uid) ? <AiFillHeart /> : <AiOutlineHeart />}
+            {post?.likeCount || 0}
+          </button>
+          <button type="button" className="text-gray-500 hover:text-black dark:text-gray-200 dark:hover:text-white dark:focus:text-white focus:text-black">
+            <FaRegComment />
+          </button>
+        </div>
       </div>
     </div>
   );

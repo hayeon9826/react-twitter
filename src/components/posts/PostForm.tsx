@@ -82,7 +82,7 @@ export default function PostForm() {
   return (
     <form onSubmit={onSubmit} className="relative">
       <textarea
-        className="min-h-[120px] block w-full resize-none border-0 py-4 px-4 !outline-none dark:bg-slate-800 dark:text-white text-gray-900 placeholder:text-gray-400 focus:ring-0 ring-0 sm:text-sm sm:leading-6 md:text-xl md:placeholder:text-xl border-b-[1px] border-b-slate-100"
+        className="min-h-[120px] block w-full resize-none border-0 py-4 px-4 !outline-none dark:bg-slate-800 dark:text-white text-gray-900 placeholder:text-gray-400 focus:ring-0 ring-0 sm:text-sm sm:leading-6 md:text-xl md:placeholder:text-xl border-b-[1px] border-b-slate-100 dark:border-b-slate-600"
         name="content"
         id="content"
         required

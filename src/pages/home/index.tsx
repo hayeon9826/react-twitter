@@ -10,6 +10,8 @@ export interface PostProps {
   imageUrl?: string;
   imageKey?: string;
   profileUrl?: string;
+  likes?: string[];
+  likeCount?: number;
 }
 
 export default function HomePage() {

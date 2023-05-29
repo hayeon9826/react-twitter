@@ -22,7 +22,12 @@ export default function ProfilePage() {
   useEffect(() => {
     if (user) {
       let postsRef = collection(db, "posts");
-      let postsQuery = query(postsRef, where("uid", "==", user.uid), orderBy("createdAt", "desc"));
+      let postsQuery;
+      if (activeTab === "my") {
+        postsQuery = query(postsRef, where("uid", "==", user.uid), orderBy("createdAt", "desc"));
+      } else {
+        postsQuery = query(postsRef, where("likes", "array-contains", user.uid), orderBy("createdAt", "desc"));
+      }
       onSnapshot(postsQuery, (snapShot) => {
         let dataObj = snapShot.docs.map((doc) => ({
           ...doc.data(),
@@ -31,7 +36,7 @@ export default function ProfilePage() {
         setPosts(dataObj as PostProps[]);
       });
     }
-  }, [user]);
+  }, [activeTab, user]);
   return (
     <>
       <Header hasBack={true} />

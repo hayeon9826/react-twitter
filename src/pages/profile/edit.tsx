@@ -137,13 +137,6 @@ export default function ProfileEditPage() {
             className="disabled:bg-blue-600/50 rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
           />
         </div>
-        <div className="mt-8">
-          <input
-            type="submit"
-            value="프로필 수정"
-            className="w-full bg-blue-500 focus:bg-blue-600 hover:bg-blue-600 text-white rounded-md px-4 py-2.5 cursor-pointer"
-          />
-        </div>
       </form>
     </>
   );
