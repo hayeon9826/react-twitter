@@ -3,7 +3,7 @@ import { PostProps } from "pages/home";
 import { User } from "firebase/auth";
 import { toast } from "react-toastify";
 import { db } from "firebaseApp";
-import { doc, deleteDoc, updateDoc, arrayUnion, getDoc, arrayRemove } from "firebase/firestore";
+import { doc, deleteDoc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
 import { getStorage, ref, deleteObject } from "firebase/storage";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { FaRegComment } from "react-icons/fa";

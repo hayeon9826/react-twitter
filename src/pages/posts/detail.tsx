@@ -1,6 +1,6 @@
 import { useCallback, useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { deleteDoc, doc, getDoc } from "firebase/firestore";
+import { doc, deleteDoc, updateDoc, arrayUnion, arrayRemove, getDoc } from "firebase/firestore";
 import { getStorage, ref, deleteObject } from "firebase/storage";
 
 import { db } from "firebaseApp";
@@ -9,9 +9,12 @@ import AuthContext from "context/AuthContext";
 
 import { toast } from "react-toastify";
 import Header from "components/Header";
+import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import { FaRegComment } from "react-icons/fa";
 
 export default function PostDetailPage() {
   const [post, setPost] = useState<PostProps | null>(null);
+  const [toggle, setToggle] = useState<boolean>(false);
   const params = useParams();
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -39,16 +42,38 @@ export default function PostDetailPage() {
       const docSnap = await getDoc(docRef);
       setPost({ ...(docSnap?.data() as PostProps), id: docSnap.id });
     }
-  }, [params.id]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params.id, toggle]);
+
+  const toggleLike = async () => {
+    if (post) {
+      const postRef = doc(db, "posts", post?.id);
+      if (user?.uid && post?.likes?.includes(user?.uid)) {
+        await updateDoc(postRef, {
+          likes: arrayRemove(user?.uid),
+          likeCount: post?.likeCount ? post?.likeCount - 1 : 0,
+          updatedAt: new Date()?.toLocaleDateString(),
+        });
+        setToggle(false);
+      } else {
+        await updateDoc(postRef, {
+          likes: arrayUnion(user?.uid),
+          likeCount: post?.likeCount ? post?.likeCount + 1 : 1,
+          updatedAt: new Date()?.toLocaleDateString(),
+        });
+        setToggle(true);
+      }
+    }
+  };
 
   useEffect(() => {
     if (params.id) getPost();
-  }, [getPost, params.id]);
+  }, [getPost, params.id, toggle]);
 
   return (
     <>
       <Header hasBack={true} />
-      <div className="border-b-[1px] border-b-slate-100 py-4">
+      <div className="border-b-[1px] border-b-slate-100 dark:border-b-slate-600 py-4">
         {post ? (
           <>
             <Link to={`/posts/${post?.id}`}>
@@ -65,16 +90,35 @@ export default function PostDetailPage() {
               </div>
             </Link>
             <div className="px-4 mt-2">
-              {user?.uid === post?.uid && (
-                <div className="text-sm flex gap-2 flex-row-reverse">
-                  <button type="button" className="cursor-pointer text-black hover:text-red-600 focus:text-red-600" onClick={handleDelete}>
-                    삭제
-                  </button>
-                  <button type="button" className="text-gray-600 hover:text-black focus:text-black">
-                    <Link to={`/posts/edit/${post?.id}`}>수정</Link>
-                  </button>
-                </div>
-              )}
+              <div className="text-sm flex gap-2 flex-row-reverse">
+                {user?.uid === post?.uid && (
+                  <>
+                    <button type="button" className="cursor-pointer text-black dark:text-white hover:text-red-600 focus:text-red-600" onClick={handleDelete}>
+                      삭제
+                    </button>
+                    <button
+                      type="button"
+                      className="text-gray-600 hover:text-black dark:text-gray-200 dark:hover:text-white dark:focus:text-white focus:text-black"
+                    >
+                      <Link to={`/posts/edit/${post?.id}`}>수정</Link>
+                    </button>
+                  </>
+                )}
+                <button
+                  type="button"
+                  className="cursor-pointer text-sm flex gap-2 items-center text-gray-500 dark:text-gray-20 hover:text-red-600 focus:text-red-600"
+                  onClick={toggleLike}
+                >
+                  {user?.uid && post?.likes?.includes(user?.uid) ? <AiFillHeart /> : <AiOutlineHeart />}
+                  {post?.likeCount || 0}
+                </button>
+                <button
+                  type="button"
+                  className="text-gray-500 hover:text-black dark:text-gray-200 dark:hover:text-white dark:focus:text-white focus:text-black"
+                >
+                  <FaRegComment />
+                </button>
+              </div>
             </div>
             {post?.imageUrl && (
               <div className="p-4">
@@ -85,7 +129,7 @@ export default function PostDetailPage() {
         ) : (
           "loading"
         )}
-        <div className="px-4">
+        <div className="px-4 mt-8">
           <button type="button" className="w-full bg-blue-500 focus:bg-blue-600 hover:bg-blue-600 text-white rounded-md px-4 py-2.5 cursor-pointer">
             <Link to="/">목록으로 돌아가기</Link>
           </button>
