@@ -45,6 +45,7 @@ export default function PostEditForm() {
               console.log(error);
             });
           }
+          // 새로운 사진 업로드
           const storageRef = ref(storage, key);
           const data = await uploadString(storageRef, newImageFile, "data_url");
           imageUrl = await getDownloadURL(data?.ref);

@@ -26,7 +26,6 @@ export default function PostForm() {
       // image 먼저 업로드
       if (imageFile) {
         const data = await uploadString(storageRef, imageFile, "data_url");
-        console.log(data?.metadata?.name);
         imageUrl = await getDownloadURL(data?.ref);
         imageKey = data?.metadata?.name;
       }

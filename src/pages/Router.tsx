@@ -5,6 +5,7 @@ import HomePage from "./home";
 import PostDetailPage from "./posts/detail";
 import PostEditPage from "./posts/edit";
 import ProfilePage from "./profile";
+import ProfileEditPage from "./profile/edit";
 
 interface RouterProps {
   isAuthenticated: boolean;
@@ -19,6 +20,7 @@ export default function Router({ isAuthenticated }: RouterProps) {
           <Route path="/posts/:id" element={<PostDetailPage />} />
           <Route path="/posts/edit/:id" element={<PostEditPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/profile/edit" element={<ProfileEditPage />} />
           <Route path="*" element={<Navigate replace to="/" />} />
         </>
       ) : (
