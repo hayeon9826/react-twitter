@@ -5,6 +5,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Router from "pages/Router";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+import { Layout } from "components/layout";
 
 function App() {
   const auth = getAuth(app);
@@ -23,8 +24,10 @@ function App() {
   }, [auth]);
   return (
     <>
-      <ToastContainer position="top-right" autoClose={1000} hideProgressBar newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
-      {init ? <Router isAuthenticated={isAuthenticated} /> : "initializing"}
+      <Layout>
+        <ToastContainer position="top-right" autoClose={1000} hideProgressBar newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
+        {init ? <Router isAuthenticated={isAuthenticated} /> : "initializing"}
+      </Layout>
     </>
   );
 }

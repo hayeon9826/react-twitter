@@ -1,15 +1,8 @@
-import { useContext, useEffect, useState } from "react";
-
-import { db } from "firebaseApp";
-import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
-
 import { toast } from "react-toastify";
 import { app } from "firebaseApp";
 import { getAuth, signOut } from "firebase/auth";
-import AuthContext from "context/AuthContext";
-import PostBox from "components/posts/PostBox";
-import PostForm from "components/posts/PostForm";
-import { Link } from "react-router-dom";
+
+import PostList from "components/posts/PostList";
 
 export interface PostProps {
   id: string;
@@ -22,30 +15,13 @@ export interface PostProps {
 }
 
 export default function HomePage() {
-  const { user } = useContext(AuthContext);
-  const [posts, setPosts] = useState<PostProps[]>([]);
-
-  useEffect(() => {
-    if (user) {
-      let postsRef = collection(db, "posts");
-      let postsQuery = query(postsRef, orderBy("createdAt", "desc"));
-      onSnapshot(postsQuery, (snapShot) => {
-        let dataObj = snapShot.docs.map((doc) => ({
-          ...doc.data(),
-          id: doc.id,
-        }));
-        setPosts(dataObj as PostProps[]);
-      });
-    }
-  }, [user]);
-
   return (
     <>
-      <h1>Home</h1>
-      <h2>안녕하세요 {user?.email} 님</h2>
+      <h1 className="py-4 text-xl font-bold">Home</h1>
+      <PostList />
       <button
         type="button"
-        className="Profile__logout"
+        className="fixed left-10 bottom-10 rounded-full bg-blue-600 px-2.5 py-1 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
         onClick={async () => {
           const auth = getAuth(app);
           await signOut(auth);
@@ -54,22 +30,6 @@ export default function HomePage() {
       >
         로그아웃
       </button>
-      <br />
-      <Link to="/profile">프로필</Link>
-      <br />
-      <br />
-      <PostForm />
-      <br />
-      <br />
-      <div className="Post__list">
-        {posts?.length > 0 ? (
-          posts.map((post, index) => <PostBox key={post?.id} index={index} post={post} user={user} />)
-        ) : (
-          <div className="Post__box--no-posts">
-            <div className="Post__text">게시글이 없습니다</div>
-          </div>
-        )}
-      </div>
     </>
   );
 }

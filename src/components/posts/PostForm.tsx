@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { getAuth } from "firebase/auth";
 import AuthContext from "context/AuthContext";
 import { v4 as uuidv4 } from "uuid";
+import { FiImage } from "react-icons/fi";
 
 export default function PostForm() {
   const [content, setContent] = useState<string>("");
@@ -78,18 +79,44 @@ export default function PostForm() {
   };
 
   return (
-    <form onSubmit={onSubmit} className="Form">
-      <textarea name="content" id="content" required placeholder="tweet" value={content} onChange={onChange} />
-      <input type="file" accept="image/*" onChange={handleFileUpload} />
+    <form onSubmit={onSubmit} className="relative">
+      <textarea
+        className="min-h-[120px] block w-full resize-none border-0 py-2 px-4 !outline-none text-gray-900 placeholder:text-gray-400 focus:ring-0 ring-0 sm:text-sm sm:leading-6 md:text-xl md:placeholder:text-xl border-b-[1px] border-b-slate-100"
+        name="content"
+        id="content"
+        required
+        placeholder="What is happening?"
+        value={content}
+        onChange={onChange}
+      />
       {imageFile && (
-        <div>
-          <img src={imageFile} alt="attachment" width={100} height={100} />
-          <button type="button" onClick={handleDeleteImage}>
-            Clear
+        <div className="py-3 flex justify-start items-end gap-4">
+          <div className="border rounded-md border-slate-100 p-4">
+            <img src={imageFile} alt="attachment" width={100} height={100} />
+          </div>
+
+          <button
+            type="button"
+            onClick={handleDeleteImage}
+            className="rounded-full bg-red-600 px-4 py-2 max-h-[40px] text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
+          >
+            삭제
           </button>
         </div>
       )}
-      <input type="submit" value="생성" className="Form__btn-submit" />
+      <div className="py-3 flex justify-between border-b-[1px] border-b-slate-100">
+        <label htmlFor="file-input" className="cursor-pointer px-4 flex flex-col justify-center">
+          <FiImage className="text-blue-500 hover:text-blue-600 focus:text-blue-600" />
+        </label>
+        <input type="file" name="file-input" id="file-input" accept="image/*" onChange={handleFileUpload} className="hidden" />
+
+        <input
+          type="submit"
+          disabled={!content}
+          value="Tweet"
+          className="disabled:bg-blue-600/50 rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+        />
+      </div>
     </form>
   );
 }
