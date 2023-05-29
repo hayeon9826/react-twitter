@@ -4,17 +4,11 @@ import { PostProps } from "pages/home";
 import { db } from "firebaseApp";
 import { collection, onSnapshot, orderBy, query, where } from "firebase/firestore";
 
-import { toast } from "react-toastify";
-import { app } from "firebaseApp";
-import { getAuth, signOut } from "firebase/auth";
-import { MdLogout } from "react-icons/md";
-import { BiUserCircle } from "react-icons/bi";
-import { BsSun } from "react-icons/bs";
-
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import cn from "classnames";
 import Header from "components/Header";
+import MenuList from "components/Menu";
 
 const PROFILE_DEFAULT_URL = "/images/user-icon.png";
 type TabType = "my" | "like";
@@ -47,37 +41,42 @@ export default function ProfilePage() {
         <button
           type="button"
           onClick={() => navigate("/profile/edit")}
-          className="px-6 py-2 rounded-full border border-slate-400 hover:bg-black/10 focus:bg-black/10 text-gray-600"
+          className="px-6 py-2 rounded-full border border-slate-400 dark:border-slate-200 dark:text-gray-300 hover:bg-black/10 focus:bg-black/10 text-gray-600"
         >
           프로필 수정
         </button>
       </div>
       <div className="px-4 mt-4">
-        <div className="text-gray-500 font-bold text-lg">{user?.displayName || "사용자님"}</div>
-        <div className="text-gray-500 text-sm">{user?.email}</div>
+        <div className="text-gray-500 dark:text-gray-300 font-bold text-lg">{user?.displayName || "사용자님"}</div>
+        <div className="text-gray-500 dark:text-gray-300 text-sm">{user?.email}</div>
       </div>
-
       <div className="w-full grid grid-cols-2 mt-8">
         <div
           role="presentation"
           onClick={() => setActiveTab("my")}
-          className={cn("font-medium text-center hover:bg-gray-100 py-4 cursor-pointer text-gray-500", {
-            "font-bold text-black border-b-2 border-b-blue-500": activeTab === "my",
-          })}
+          className={cn(
+            "font-medium text-center dark:hover:bg-slate-700 hover:bg-gray-100 py-4 cursor-pointer text-gray-500 dark:text-white dark:hover:text-gray-100 dark:focus:text-gray-100",
+            {
+              "font-bold text-black border-b-2 border-b-blue-500": activeTab === "my",
+            }
+          )}
         >
           내가쓴 글
         </div>
         <div
           role="presentation"
           onClick={() => setActiveTab("like")}
-          className={cn("font-medium text-center hover:bg-gray-100 py-4 cursor-pointer text-gray-500", {
-            "font-bold text-black border-b-2 border-b-blue-500": activeTab === "like",
-          })}
+          className={cn(
+            "font-medium text-center dark:hover:bg-slate-700 hover:bg-gray-100 py-4 cursor-pointer text-gray-500 dark:text-white dark:hover:text-gray-100 dark:focus:text-gray-100",
+            {
+              "font-bold text-black border-b-2 border-b-blue-500": activeTab === "like",
+            }
+          )}
         >
           좋아요한 글
         </div>
       </div>
-      <div className="mb-10">
+      <div className="pb-10">
         {posts?.length > 0 ? (
           posts.map((post, index) => <PostBox key={post?.id} index={index} post={post} user={user} />)
         ) : (
@@ -86,38 +85,7 @@ export default function ProfilePage() {
           </div>
         )}
       </div>
-      <div className="fixed lg:left-[8%] lg:top-10 lg:bg-transparent z-10 lg:w-[200px] bg-white bottom-0 w-full inset-x-0 mx-auto max-w-[600px] lg:mx-0 border border-slate-100 lg:border-none">
-        <div className="lg:flex-col gap-3 flex justify-between px-20 lg:px-0">
-          <button
-            type="button"
-            className="flex items-center gap-3 px-4 py-2 lg:w-full text-lg font-semibold text-gray-500 hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus:text-black"
-            onClick={async () => {
-              const auth = getAuth(app);
-              await signOut(auth);
-              toast.success("로그아웃 되었습니다.");
-            }}
-          >
-            <MdLogout className="font-bold text-2xl lg:text-lg" />
-            <div className="hidden lg:block">로그아웃</div>
-          </button>
-          <button
-            type="button"
-            className="flex items-center gap-3 px-4 py-2 lg:w-full text-lg font-semibold text-gray-500 hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus:text-black"
-            onClick={() => navigate("/profile")}
-          >
-            <BiUserCircle className="font-bold text-2xl lg:text-lg" />
-            <div className="hidden lg:block">프로필</div>
-          </button>
-          <button
-            type="button"
-            className="flex items-center gap-3 px-4 py-2 lg:w-full text-lg font-semibold text-gray-500 hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus:text-black"
-            onClick={() => navigate("/profile")}
-          >
-            <BsSun className="font-bold text-2xl lg:text-lg" />
-            <div className="hidden lg:block">다크모드</div>
-          </button>
-        </div>
-      </div>
+      <MenuList />
     </>
   );
 }

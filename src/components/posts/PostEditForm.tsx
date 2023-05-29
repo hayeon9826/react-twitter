@@ -106,7 +106,7 @@ export default function PostEditForm() {
     <>
       <form onSubmit={onSubmit} className="relative">
         <textarea
-          className="min-h-[120px] block w-full resize-none border-0 py-4 px-4 !outline-none text-gray-900 placeholder:text-gray-400 focus:ring-0 ring-0 sm:text-sm sm:leading-6 md:text-xl md:placeholder:text-xl border-b-[1px] border-b-slate-100"
+          className="min-h-[120px] block w-full resize-none border-0 py-4 px-4 !outline-none dark:bg-slate-800 dark:text-white text-gray-900 placeholder:text-gray-400 focus:ring-0 ring-0 sm:text-sm sm:leading-6 md:text-xl md:placeholder:text-xl border-b-[1px] border-b-slate-100"
           name="content"
           id="content"
           required
@@ -115,7 +115,7 @@ export default function PostEditForm() {
           onChange={onChange}
         />
         {(imageFile || newImageFile) && (
-          <div className="py-3 flex justify-start items-end gap-4">
+          <div className="py-3 flex justify-start items-end gap-4 px-4">
             <div className="border rounded-md border-slate-100 p-4">
               <img src={imageFile || newImageFile || ""} alt="attachment" width={100} height={100} />
             </div>

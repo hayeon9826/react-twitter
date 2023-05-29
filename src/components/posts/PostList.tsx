@@ -42,29 +42,37 @@ export default function PostList() {
         <div
           role="presentation"
           onClick={() => setActiveTab("all")}
-          className={cn("font-medium text-center hover:bg-gray-100 py-4 cursor-pointer text-gray-500", {
-            "font-bold text-black border-b-2 border-b-blue-500": activeTab === "all",
-          })}
+          className={cn(
+            "font-medium text-center dark:hover:bg-slate-700 hover:bg-gray-100 py-4 cursor-pointer text-gray-500 dark:text-white dark:hover:text-gray-100 dark:focus:text-gray-100",
+            {
+              "font-bold text-black border-b-2 border-b-blue-500": activeTab === "all",
+            }
+          )}
         >
           전체 글
         </div>
         <div
           role="presentation"
           onClick={() => setActiveTab("my")}
-          className={cn("font-medium text-center hover:bg-gray-100 py-4 cursor-pointer text-gray-500", {
-            "font-bold text-black border-b-2 border-b-blue-500": activeTab === "my",
-          })}
+          className={cn(
+            "font-medium text-center dark:hover:bg-slate-700 hover:bg-gray-100 py-4 cursor-pointer text-gray-500 dark:text-white dark:hover:text-gray-100 dark:focus:text-gray-100",
+            {
+              "font-bold text-black border-b-2 border-b-blue-500": activeTab === "my",
+            }
+          )}
         >
           내가쓴 글
         </div>
       </div>
       <PostForm />
-      <div className="mb-10">
+      <div className="pb-10">
         {posts?.length > 0 ? (
           posts.map((post, index) => <PostBox key={post?.id} index={index} post={post} user={user} />)
         ) : (
           <div className="mx-8 mt-6">
-            <div className="rounded-lg border p-4 border-slate-100 text-sm text-gray-500">게시글이 없습니다</div>
+            <div className="rounded-lg border p-4 border-slate-100 dark:border-slate-600 text-sm text-gray-500 dark:text-white dark:hover:text-gray-100">
+              게시글이 없습니다
+            </div>
           </div>
         )}
       </div>

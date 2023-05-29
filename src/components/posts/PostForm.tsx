@@ -82,7 +82,7 @@ export default function PostForm() {
   return (
     <form onSubmit={onSubmit} className="relative">
       <textarea
-        className="min-h-[120px] block w-full resize-none border-0 py-4 px-4 !outline-none text-gray-900 placeholder:text-gray-400 focus:ring-0 ring-0 sm:text-sm sm:leading-6 md:text-xl md:placeholder:text-xl border-b-[1px] border-b-slate-100"
+        className="min-h-[120px] block w-full resize-none border-0 py-4 px-4 !outline-none dark:bg-slate-800 dark:text-white text-gray-900 placeholder:text-gray-400 focus:ring-0 ring-0 sm:text-sm sm:leading-6 md:text-xl md:placeholder:text-xl border-b-[1px] border-b-slate-100"
         name="content"
         id="content"
         required
@@ -99,22 +99,22 @@ export default function PostForm() {
           <button
             type="button"
             onClick={handleDeleteImage}
-            className="rounded-full bg-red-600 px-4 py-2 max-h-[40px] text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
+            className="rounded-full bg-red-600 dark:text-white px-4 py-2 max-h-[40px] text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
           >
             삭제
           </button>
         </div>
       )}
-      <div className="py-3 flex justify-between border-b-[1px] border-b-slate-100 px-4">
+      <div className="py-3 flex justify-between border-b-[1px] border-b-slate-100 dark:border-b-slate-600 px-4">
         <label htmlFor="file-input" className="cursor-pointer px-4 flex flex-col justify-center">
-          <FiImage className="text-blue-500 hover:text-blue-600 focus:text-blue-600" />
+          <FiImage className="dark:text-blue-300 dark:hover:text-blue-400 dark:focus:text-blue-400 text-blue-500 hover:text-blue-600 focus:text-blue-600" />
         </label>
         <input type="file" name="file-input" id="file-input" accept="image/*" onChange={handleFileUpload} className="hidden" />
         <input
           type="submit"
           disabled={!content}
           value="Tweet"
-          className="disabled:bg-blue-600/50 rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+          className="disabled:bg-blue-600/50 rounded-full bg-blue-600 dark:bg-blue-400 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
         />
       </div>
     </form>

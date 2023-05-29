@@ -30,7 +30,7 @@ export default function PostBox({ index, post, user }: PostBoxProps) {
   };
 
   return (
-    <div key={index} className="border-b-[1px] border-b-slate-100 py-2">
+    <div key={index} className="border-b-[1px] border-b-slate-100 dark:border-b-slate-600 py-2">
       <Link to={`/posts/${post?.id}`}>
         <div className="px-4">
           <div className="flex gap-2 items-center">
@@ -47,16 +47,16 @@ export default function PostBox({ index, post, user }: PostBoxProps) {
 
       {post?.imageUrl && (
         <div className="p-4">
-          <img src={post?.imageUrl} className="w-full h-auto rounded-xl border border-slate-100" alt="post img" />
+          <img src={post?.imageUrl} className="w-full h-auto rounded-xl border border-slate-100 dark:border-slate-600" alt="post img" />
         </div>
       )}
       <div className="px-4 mt-2">
         {user?.uid === post?.uid && (
           <div className="text-sm flex gap-2 flex-row-reverse">
-            <button type="button" className="cursor-pointer text-black hover:text-red-600 focus:text-red-600" onClick={handleDelete}>
+            <button type="button" className="cursor-pointer text-black dark:text-white hover:text-red-600 focus:text-red-600" onClick={handleDelete}>
               삭제
             </button>
-            <button type="button" className="text-gray-600 hover:text-black focus:text-black">
+            <button type="button" className="text-gray-600 hover:text-black dark:text-gray-200 dark:hover:text-white dark:focus:text-white focus:text-black">
               <Link to={`/posts/edit/${post?.id}`}>수정</Link>
             </button>
           </div>

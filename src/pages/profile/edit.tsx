@@ -8,6 +8,7 @@ import { app } from "firebaseApp";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { FiImage } from "react-icons/fi";
+import Header from "components/Header";
 
 export const PROFILE_DEFAULT_URL = "/images/user-icon.png";
 
@@ -91,8 +92,8 @@ export default function ProfileEditPage() {
 
   return (
     <>
-      <form onSubmit={onSubmit} className="relative pt-10 px-4">
-        <h1 className="text-center text-xl font-bold">프로필 수정</h1>
+      <Header hasBack={true} />
+      <form onSubmit={onSubmit} className="relative pt-4 px-4">
         <label htmlFor="email" className="block font-semibold text-lg">
           이름
         </label>
@@ -101,7 +102,7 @@ export default function ProfileEditPage() {
           name="displayName"
           value={displayName}
           onChange={onChange}
-          className="w-full px-4 py-2 !outline-none border border-slate-100 focus:border-blue-600 rounded-md mt-2"
+          className="w-full px-4 py-2 !outline-none border border-slate-100 dark:border-slate-600 dark:bg-slate-600 focus:border-blue-600 rounded-md mt-2"
         />
         {(defaultUrl || newImageUrl) && (
           <div>

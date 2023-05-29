@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useState } from "react";
+import { ReactNode, createContext, useEffect, useState } from "react";
 
 const ThemeContext = createContext({
   theme: "light",
@@ -16,6 +16,11 @@ export const ThemeContextProvider = ({ children }: ThemeProps) => {
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
     window.localStorage.setItem("theme", theme === "light" ? "dark" : "light");
   };
+
+  useEffect(() => {
+    if (theme === "light") document.body.classList.remove("dark");
+    else document.body.classList.add("dark");
+  }, [theme]);
 
   return <ThemeContext.Provider value={{ theme, toggleMode }}>{children}</ThemeContext.Provider>;
 };
