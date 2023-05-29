@@ -1,22 +1,25 @@
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { doc, deleteDoc, updateDoc, arrayUnion, arrayRemove, getDoc } from "firebase/firestore";
+import { doc, deleteDoc, updateDoc, arrayUnion, arrayRemove, onSnapshot } from "firebase/firestore";
 import { getStorage, ref, deleteObject } from "firebase/storage";
 
 import { db } from "firebaseApp";
-import { PostProps } from "pages/home";
+import { CommentProps, PostProps } from "pages/home";
 import AuthContext from "context/AuthContext";
 
 import { toast } from "react-toastify";
 import Header from "components/Header";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { FaRegComment } from "react-icons/fa";
+import CommentForm from "components/comments/CommentForm";
+import CommentBox from "components/comments/CommentBox";
 
 export default function PostDetailPage() {
   const [post, setPost] = useState<PostProps | null>(null);
   const [toggle, setToggle] = useState<boolean>(false);
   const params = useParams();
   const { user } = useContext(AuthContext);
+  const [openComment, setOpenComment] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const storage = getStorage();
@@ -35,15 +38,6 @@ export default function PostDetailPage() {
       toast.success("게시글을 삭제했습니다.");
     }
   };
-
-  const getPost = useCallback(async () => {
-    if (params.id) {
-      const docRef = doc(db, "posts", params.id);
-      const docSnap = await getDoc(docRef);
-      setPost({ ...(docSnap?.data() as PostProps), id: docSnap.id });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params.id, toggle]);
 
   const toggleLike = async () => {
     if (post) {
@@ -67,28 +61,34 @@ export default function PostDetailPage() {
   };
 
   useEffect(() => {
-    if (params.id) getPost();
-  }, [getPost, params.id, toggle]);
+    if (params.id) {
+      const docRef = doc(db, "posts", params.id);
+      onSnapshot(docRef, (snapshot) => {
+        let obj = { ...snapshot?.data(), id: snapshot.id };
+        const item = obj as PostProps;
+        setPost(item);
+      });
+    }
+  }, [params.id, toggle]);
 
   return (
     <>
       <Header hasBack={true} />
-      <div className="border-b-[1px] border-b-slate-100 dark:border-b-slate-600 py-4">
+      <div className=" pt-4 pb-10">
         {post ? (
           <>
-            <Link to={`/posts/${post?.id}`}>
-              <div className="px-4">
-                <div className="flex gap-2 items-center">
-                  <img src={post?.profileUrl || "/images/user-icon.png"} alt="profile" className="rounded-full w-10 h-10" />
-                  <div className="flex gap-2">
-                    <div className="text-sm">{post?.email}</div>
-                    <div className="text-sm text-gray-500">{post?.createdAt}</div>
-                  </div>
+            <div className="px-4">
+              <div className="flex gap-2 items-center">
+                <img src={post?.profileUrl || "/images/user-icon.png"} alt="profile" className="rounded-full w-10 h-10" />
+                <div className="flex gap-2">
+                  <div className="text-sm">{post?.email}</div>
+                  <div className="text-sm text-gray-500">{post?.createdAt}</div>
                 </div>
-
-                <div className="font-bold py-1">{post?.content}</div>
               </div>
-            </Link>
+
+              <div className="font-bold py-1">{post?.content}</div>
+            </div>
+
             <div className="px-4 mt-2">
               <div className="text-sm flex gap-2 flex-row-reverse">
                 {user?.uid === post?.uid && (
@@ -114,6 +114,7 @@ export default function PostDetailPage() {
                 </button>
                 <button
                   type="button"
+                  onClick={() => setOpenComment((prev) => !prev)}
                   className="text-gray-500 hover:text-black dark:text-gray-200 dark:hover:text-white dark:focus:text-white focus:text-black"
                 >
                   <FaRegComment />
@@ -134,6 +135,13 @@ export default function PostDetailPage() {
             <Link to="/">목록으로 돌아가기</Link>
           </button>
         </div>
+        {openComment && <CommentForm post={post} />}
+        {post?.comments
+          ?.slice(0)
+          .reverse()
+          ?.map((data: CommentProps, index) => (
+            <CommentBox data={data} key={index} post={post} />
+          ))}
       </div>
     </>
   );

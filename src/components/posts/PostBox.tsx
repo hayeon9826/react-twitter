@@ -7,6 +7,8 @@ import { doc, deleteDoc, updateDoc, arrayUnion, arrayRemove } from "firebase/fir
 import { getStorage, ref, deleteObject } from "firebase/storage";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { FaRegComment } from "react-icons/fa";
+import { useState } from "react";
+import CommentForm from "../comments/CommentForm";
 
 interface PostBoxProps {
   index: number;
@@ -17,6 +19,7 @@ interface PostBoxProps {
 export default function PostBox({ index, post, user }: PostBoxProps) {
   const storage = getStorage();
   const imageRef = ref(storage, post?.imageUrl);
+  const [openComment, setOpenComment] = useState<boolean>(false);
 
   const handleDelete = async () => {
     const confirm = window.confirm("해당 게시글을 삭제하시겠습니까?");
@@ -90,11 +93,17 @@ export default function PostBox({ index, post, user }: PostBoxProps) {
             {user?.uid && post?.likes?.includes(user?.uid) ? <AiFillHeart /> : <AiOutlineHeart />}
             {post?.likeCount || 0}
           </button>
-          <button type="button" className="text-gray-500 hover:text-black dark:text-gray-200 dark:hover:text-white dark:focus:text-white focus:text-black">
+          <button
+            type="button"
+            className="text-gray-500  text-sm flex gap-2 items-center hover:text-black dark:text-gray-200 dark:hover:text-white dark:focus:text-white focus:text-black"
+            onClick={() => setOpenComment((prev) => !prev)}
+          >
             <FaRegComment />
+            {post?.comments?.length || 0}
           </button>
         </div>
       </div>
+      {openComment && <CommentForm post={post} />}
     </div>
   );
 }

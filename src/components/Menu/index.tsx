@@ -23,7 +23,7 @@ export default function MenuList() {
           className="flex items-center gap-3 px-4 py-2 lg:w-full text-lg font-semibold text-gray-500  dark:text-gray-100 dark:hover:text-gray-200 dark:focus:text-gray-200hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus:text-black"
           onClick={() => navigate("/")}
         >
-          <BsHouse className="font-bold text-2xl lg:text-lg" />
+          <BsHouse className="font-bold text-xl lg:text-lg" />
           <div className="hidden lg:block">홈</div>
         </button>
         <button
@@ -31,7 +31,7 @@ export default function MenuList() {
           className="flex items-center gap-3 px-4 py-2 lg:w-full text-lg font-semibold text-gray-500  dark:text-gray-100 dark:hover:text-gray-200 dark:focus:text-gray-200hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus:text-black"
           onClick={() => navigate("/profile")}
         >
-          <BiUserCircle className="font-bold text-2xl lg:text-lg" />
+          <BiUserCircle className="font-bold text-xl lg:text-lg" />
           <div className="hidden lg:block">프로필</div>
         </button>
         <button
@@ -39,7 +39,7 @@ export default function MenuList() {
           className="flex items-center gap-3 px-4 py-2 lg:w-full text-lg font-semibold text-gray-500  dark:text-gray-100 dark:hover:text-gray-200 dark:focus:text-gray-200hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus:text-black"
           onClick={context.toggleMode}
         >
-          {context.theme === "dark" ? <BsMoon className="font-bold text-2xl lg:text-lg" /> : <BsSun className="font-bold text-2xl lg:text-lg" />}
+          {context.theme === "dark" ? <BsMoon className="font-bold text-xl lg:text-lg" /> : <BsSun className="font-bold text-xl lg:text-lg" />}
           <div className="hidden lg:block">{context.theme === "dark" ? "다크모드" : "라이트모드"}</div>
         </button>
         <button
@@ -51,7 +51,7 @@ export default function MenuList() {
             toast.success("로그아웃 되었습니다.");
           }}
         >
-          <MdLogout className="font-bold text-2xl lg:text-lg" />
+          <MdLogout className="font-bold text-xl lg:text-lg" />
           <div className="hidden lg:block">로그아웃</div>
         </button>
       </div>

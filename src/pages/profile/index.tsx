@@ -8,7 +8,6 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import cn from "classnames";
 import Header from "components/Header";
-import MenuList from "components/Menu";
 
 const PROFILE_DEFAULT_URL = "/images/user-icon.png";
 type TabType = "my" | "like";
@@ -90,7 +89,6 @@ export default function ProfilePage() {
           </div>
         )}
       </div>
-      <MenuList />
     </>
   );
 }

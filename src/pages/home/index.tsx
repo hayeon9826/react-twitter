@@ -1,5 +1,11 @@
 import PostList from "components/posts/PostList";
-import MenuList from "components/Menu";
+
+export interface CommentProps {
+  comment: string;
+  uid: string;
+  email: string;
+  createdAt: string;
+}
 
 export interface PostProps {
   id: string;
@@ -12,6 +18,7 @@ export interface PostProps {
   profileUrl?: string;
   likes?: string[];
   likeCount?: number;
+  comments?: CommentProps[];
 }
 
 export default function HomePage() {
@@ -19,7 +26,6 @@ export default function HomePage() {
     <>
       <h1 className="py-4 text-xl font-bold px-4">Home</h1>
       <PostList />
-      <MenuList />
     </>
   );
 }
