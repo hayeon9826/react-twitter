@@ -51,7 +51,7 @@ export default function LoginForm() {
 
   const onClickSocialLogin = async (e: any) => {
     const {
-      target: { name, value },
+      target: { name },
     } = e;
     let provider;
     const auth = getAuth(app);
@@ -64,16 +64,15 @@ export default function LoginForm() {
       provider = new GithubAuthProvider();
     }
 
-    const data = signInWithPopup(auth, provider as GithubAuthProvider | GoogleAuthProvider)
+    await signInWithPopup(auth, provider as GithubAuthProvider | GoogleAuthProvider)
       .then((result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential?.accessToken;
-        // The signed-in user info.
-        const user = result.user;
-        console.log(credential, token, user);
-        // IdP data available using getAdditionalUserInfo(result)
-        // ...
+        //   // This gives you a Google Access Token. You can use it to access the Google API.
+        //   const credential = GoogleAuthProvider.credentialFromResult(result);
+        //   const token = credential?.accessToken;
+        //   // The signed-in user info.
+        //   const user = result.user;
+        //   console.log(credential, token, user);
+        toast.success("로그인 되었습니다.");
       })
       .catch((error) => {
         console.log(error);
