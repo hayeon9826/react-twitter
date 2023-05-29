@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 
 import { db } from "firebaseApp";
-import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
+import { collection, onSnapshot, orderBy, query, where } from "firebase/firestore";
 
 import AuthContext from "context/AuthContext";
 import PostBox from "components/posts/PostBox";
@@ -20,7 +20,12 @@ export default function PostList() {
   useEffect(() => {
     if (user) {
       let postsRef = collection(db, "posts");
-      let postsQuery = query(postsRef, orderBy("createdAt", "desc"));
+      let postsQuery;
+      if (activeTab === "my") {
+        postsQuery = query(postsRef, where("uid", "==", user.uid), orderBy("createdAt", "desc"));
+      } else {
+        postsQuery = query(postsRef, orderBy("createdAt", "desc"));
+      }
       onSnapshot(postsQuery, (snapShot) => {
         let dataObj = snapShot.docs.map((doc) => ({
           ...doc.data(),
@@ -29,7 +34,7 @@ export default function PostList() {
         setPosts(dataObj as PostProps[]);
       });
     }
-  }, [user]);
+  }, [user, activeTab]);
 
   return (
     <>
@@ -54,12 +59,12 @@ export default function PostList() {
         </div>
       </div>
       <PostForm />
-      <div className="Post__list">
+      <div className="mb-10">
         {posts?.length > 0 ? (
           posts.map((post, index) => <PostBox key={post?.id} index={index} post={post} user={user} />)
         ) : (
-          <div className="Post__box--no-posts">
-            <div className="Post__text">게시글이 없습니다</div>
+          <div className="mx-8 mt-6">
+            <div className="rounded-lg border p-4 border-slate-100 text-sm text-gray-500">게시글이 없습니다</div>
           </div>
         )}
       </div>

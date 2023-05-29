@@ -38,6 +38,7 @@ export default function PostForm() {
         email: auth?.currentUser?.email,
         imageUrl: imageUrl,
         imageKey: imageKey,
+        profileUrl: user?.photoURL,
         uid: user?.uid,
       });
 
@@ -81,7 +82,7 @@ export default function PostForm() {
   return (
     <form onSubmit={onSubmit} className="relative">
       <textarea
-        className="min-h-[120px] block w-full resize-none border-0 py-2 px-4 !outline-none text-gray-900 placeholder:text-gray-400 focus:ring-0 ring-0 sm:text-sm sm:leading-6 md:text-xl md:placeholder:text-xl border-b-[1px] border-b-slate-100"
+        className="min-h-[120px] block w-full resize-none border-0 py-4 px-4 !outline-none text-gray-900 placeholder:text-gray-400 focus:ring-0 ring-0 sm:text-sm sm:leading-6 md:text-xl md:placeholder:text-xl border-b-[1px] border-b-slate-100"
         name="content"
         id="content"
         required
@@ -104,12 +105,11 @@ export default function PostForm() {
           </button>
         </div>
       )}
-      <div className="py-3 flex justify-between border-b-[1px] border-b-slate-100">
+      <div className="py-3 flex justify-between border-b-[1px] border-b-slate-100 px-4">
         <label htmlFor="file-input" className="cursor-pointer px-4 flex flex-col justify-center">
           <FiImage className="text-blue-500 hover:text-blue-600 focus:text-blue-600" />
         </label>
         <input type="file" name="file-input" id="file-input" accept="image/*" onChange={handleFileUpload} className="hidden" />
-
         <input
           type="submit"
           disabled={!content}

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { app } from "firebaseApp";
 import { toast } from "react-toastify";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, GoogleAuthProvider, GithubAuthProvider, signInWithPopup } from "firebase/auth";
 
 export default function SignupForm() {
   const [error, setError] = useState<string>("");
@@ -63,48 +63,119 @@ export default function SignupForm() {
     }
   };
 
-  const onClickSocialLogin = (e: any) => {
-    console.log(e.target.name);
+  const onClickSocialLogin = async (e: any) => {
+    const {
+      target: { name },
+    } = e;
+    let provider;
+    const auth = getAuth(app);
+
+    if (name === "google") {
+      provider = new GoogleAuthProvider();
+    }
+
+    if (name === "github") {
+      provider = new GithubAuthProvider();
+    }
+
+    await signInWithPopup(auth, provider as GithubAuthProvider | GoogleAuthProvider)
+      .then((result) => {
+        //   // This gives you a Google Access Token. You can use it to access the Google API.
+        //   const credential = GoogleAuthProvider.credentialFromResult(result);
+        //   const token = credential?.accessToken;
+        //   // The signed-in user info.
+        //   const user = result.user;
+        //   console.log(credential, token, user);
+        toast.success("로그인 되었습니다.");
+      })
+      .catch((error) => {
+        console.log(error);
+        const errorMessage = error.message;
+        toast.error(errorMessage);
+      });
   };
 
   return (
     <>
-      <form onSubmit={onSubmit} className="Form Form--lg">
-        <h1 className="Form__title">회원가입</h1>
-        <div className="Form__block">
-          <label htmlFor="email">이메일</label>
-          <input type="text" name="email" id="email" required value={email} onChange={onChange} />
+      <form onSubmit={onSubmit} className="pt-20 px-4">
+        <h1 className="text-center text-xl font-bold">회원가입</h1>
+        <div className="mt-8">
+          <label htmlFor="email" className="block font-semibold text-lg">
+            이메일
+          </label>
+          <input
+            type="text"
+            name="email"
+            className="w-full px-4 py-2 !outline-none border border-slate-100 focus:border-blue-600 rounded-md mt-2"
+            id="email"
+            required
+            value={email}
+            onChange={onChange}
+          />
         </div>
-        <div className="Form__block">
+        <div className="mt-8">
           <label htmlFor="password">비밀번호</label>
-          <input type="password" name="password" id="password" required value={password} onChange={onChange} />
+          <input
+            type="password"
+            className="w-full px-4 py-2 !outline-none border border-slate-100 focus:border-blue-600 rounded-md mt-2"
+            name="password"
+            id="password"
+            required
+            value={password}
+            onChange={onChange}
+          />
         </div>
-        <div className="Form__block">
-          <label htmlFor="password_confirmation">비밀번호 확인</label>
-          <input type="password" name="password_confirmation" id="password_confirmation" required value={passwordConfirmation} onChange={onChange} />
+        <div className="mt-8">
+          <label htmlFor="password_confirmation" className="block font-semibold text-lg">
+            비밀번호 확인
+          </label>
+          <input
+            type="password"
+            className="w-full px-4 py-2 !outline-none border border-slate-100 focus:border-blue-600 rounded-md mt-2"
+            name="password_confirmation"
+            id="password_confirmation"
+            required
+            value={passwordConfirmation}
+            onChange={onChange}
+          />
         </div>
         {error && error?.length > 0 && (
-          <div className="Form__block">
-            <div className="Form__error">{error}</div>
+          <div className="mt-8">
+            <div className="text-red-600 text-sm">{error}</div>
           </div>
         )}
-        <div className="Form__block">
+        <div className="mt-8">
           계정이 있으신가요?
-          <Link className="Form__link" to="/login">
+          <Link className="ml-2 text-blue-500 hover:text-blue-600 focus:text-blue-500 underline" to="/login">
             로그인하기
           </Link>
         </div>
-        <div className="Form__block--lg">
-          <input type="submit" value="회원가입" className="Form__btn-submit" disabled={error?.length > 0} />
+        <div className="mt-8">
+          <input
+            type="submit"
+            className="w-full bg-blue-500 focus:bg-blue-600 hover:bg-blue-600 text-white rounded-md px-4 py-2.5 cursor-pointer"
+            value="회원가입"
+            disabled={error?.length > 0}
+          />
         </div>
       </form>
-      <div>
-        <button type="button" name="google" onClick={onClickSocialLogin}>
+      <div className="mx-4 mt-4">
+        <button
+          type="button"
+          name="google"
+          className="w-full bg-white focus:bg-gray-100 hover:bg-gray-100 border border-slate-100 text-black rounded-md px-4 py-2.5 cursor-pointer"
+          onClick={onClickSocialLogin}
+        >
           Google로 회원가입
         </button>
       </div>
-      <div>
-        <button type="button" name="github" onClick={onClickSocialLogin}>
+      <div className="mx-4 mt-4">
+        <button
+          type="button"
+          className="w-full bg-black focus:bg-black/80 hover:bg-black/80 text-white rounded-md px-4 py-2.5 cursor-pointer"
+          name="github"
+          onClick={onClickSocialLogin}
+        >
           Github로 회원가입
         </button>
       </div>

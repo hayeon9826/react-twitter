@@ -7,9 +7,9 @@ import { toast } from "react-toastify";
 import { app } from "firebaseApp";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
+import { FiImage } from "react-icons/fi";
 
-const PROFILE_DEFAULT_URL =
-  "https://images.unsplash.com/photo-1611605698335-8b1569810432?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2148&q=80";
+export const PROFILE_DEFAULT_URL = "/images/user-icon.png";
 
 export default function ProfileEditPage() {
   const { user } = useContext(AuthContext);
@@ -91,30 +91,59 @@ export default function ProfileEditPage() {
 
   return (
     <>
-      <form onSubmit={onSubmit}>
-        <input type="text" name="displayName" value={displayName} onChange={onChange} />
-        <input type="file" accept="image/*" onChange={handleFileUpload} />
+      <form onSubmit={onSubmit} className="relative pt-10 px-4">
+        <h1 className="text-center text-xl font-bold">프로필 수정</h1>
+        <label htmlFor="email" className="block font-semibold text-lg">
+          이름
+        </label>
+        <input
+          type="text"
+          name="displayName"
+          value={displayName}
+          onChange={onChange}
+          className="w-full px-4 py-2 !outline-none border border-slate-100 focus:border-blue-600 rounded-md mt-2"
+        />
         {(defaultUrl || newImageUrl) && (
           <div>
-            <img src={defaultUrl || newImageUrl || ""} alt="attachment" width={100} height={100} />
-            <button type="button" onClick={handleDeleteImage}>
-              Clear
-            </button>
+            <div className="py-3 flex justify-start items-end gap-4">
+              <div className="border rounded-md border-slate-100 p-4">
+                <img src={defaultUrl || newImageUrl || ""} alt="attachment" width={100} height={100} />
+              </div>
+              <button
+                type="button"
+                onClick={handleDeleteImage}
+                className="rounded-full bg-red-600 px-4 py-2 max-h-[40px] text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
+              >
+                삭제
+              </button>
+            </div>
           </div>
         )}
-        <input type="submit" value="프로필 수정" />
+        <div className="py-3 flex justify-between border-b-[1px] border-b-slate-100 px-4">
+          <div className="flex justify-start gap-2 items-center">
+            <label htmlFor="email" className="block font-semibold text-lg">
+              이미지 변경
+            </label>
+            <label htmlFor="file-input" className="cursor-pointer px-4 flex flex-col justify-center">
+              <FiImage className="text-blue-500 hover:text-blue-600 focus:text-blue-600 text-xl" />
+            </label>
+          </div>
+
+          <input type="file" name="file-input" id="file-input" accept="image/*" onChange={handleFileUpload} className="hidden" />
+          <input
+            type="submit"
+            value="프로필 수정"
+            className="disabled:bg-blue-600/50 rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+          />
+        </div>
+        <div className="mt-8">
+          <input
+            type="submit"
+            value="프로필 수정"
+            className="w-full bg-blue-500 focus:bg-blue-600 hover:bg-blue-600 text-white rounded-md px-4 py-2.5 cursor-pointer"
+          />
+        </div>
       </form>
-      <button
-        type="button"
-        className="Profile__logout"
-        onClick={async () => {
-          const auth = getAuth(app);
-          await signOut(auth);
-          toast.success("로그아웃 되었습니다.");
-        }}
-      >
-        로그아웃
-      </button>
     </>
   );
 }

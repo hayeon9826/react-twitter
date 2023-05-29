@@ -1,8 +1,12 @@
 import { toast } from "react-toastify";
 import { app } from "firebaseApp";
 import { getAuth, signOut } from "firebase/auth";
+import { MdLogout } from "react-icons/md";
+import { BiUserCircle } from "react-icons/bi";
+import { BsSun } from "react-icons/bs";
 
 import PostList from "components/posts/PostList";
+import { useNavigate } from "react-router-dom";
 
 export interface PostProps {
   id: string;
@@ -12,24 +16,47 @@ export interface PostProps {
   uid: string;
   imageUrl?: string;
   imageKey?: string;
+  profileUrl?: string;
 }
 
 export default function HomePage() {
+  const navigate = useNavigate();
   return (
     <>
-      <h1 className="py-4 text-xl font-bold">Home</h1>
+      <h1 className="py-4 text-xl font-bold px-4">Home</h1>
       <PostList />
-      <button
-        type="button"
-        className="fixed left-10 bottom-10 rounded-full bg-blue-600 px-2.5 py-1 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-        onClick={async () => {
-          const auth = getAuth(app);
-          await signOut(auth);
-          toast.success("로그아웃 되었습니다.");
-        }}
-      >
-        로그아웃
-      </button>
+      <div className="fixed lg:left-[8%] lg:top-10 lg:bg-transparent z-10 lg:w-[200px] bg-white bottom-0 w-full inset-x-0 mx-auto max-w-[600px] lg:mx-0 border border-slate-100 lg:border-none">
+        <div className="lg:flex-col gap-3 flex justify-between px-20 lg:px-0">
+          <button
+            type="button"
+            className="flex items-center gap-3 px-4 py-2 lg:w-full text-lg font-semibold text-gray-500 hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus:text-black"
+            onClick={async () => {
+              const auth = getAuth(app);
+              await signOut(auth);
+              toast.success("로그아웃 되었습니다.");
+            }}
+          >
+            <MdLogout className="font-bold text-2xl lg:text-lg" />
+            <div className="hidden lg:block">로그아웃</div>
+          </button>
+          <button
+            type="button"
+            className="flex items-center gap-3 px-4 py-2 lg:w-full text-lg font-semibold text-gray-500 hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus:text-black"
+            onClick={() => navigate("/profile")}
+          >
+            <BiUserCircle className="font-bold text-2xl lg:text-lg" />
+            <div className="hidden lg:block">프로필</div>
+          </button>
+          <button
+            type="button"
+            className="flex items-center gap-3 px-4 py-2 lg:w-full text-lg font-semibold text-gray-500 hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus:text-black"
+            onClick={() => navigate("/profile")}
+          >
+            <BsSun className="font-bold text-2xl lg:text-lg" />
+            <div className="hidden lg:block">다크모드</div>
+          </button>
+        </div>
+      </div>
     </>
   );
 }

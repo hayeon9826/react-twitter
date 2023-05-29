@@ -30,29 +30,38 @@ export default function PostBox({ index, post, user }: PostBoxProps) {
   };
 
   return (
-    <div key={index} className="Post__box">
+    <div key={index} className="border-b-[1px] border-b-slate-100 py-2">
       <Link to={`/posts/${post?.id}`}>
-        <div className="Post__profile-box">
-          <div className="Post__profile" />
-          <div className="Post__author-name">{post?.email}</div>
-          <div className="Post__date">{post?.createdAt}</div>
+        <div className="px-4">
+          <div className="flex gap-2 items-center">
+            <img src={post?.profileUrl || "/images/user-icon.png"} alt="profile" className="rounded-full w-10 h-10" />
+            <div className="flex gap-2">
+              <div className="text-sm">{post?.email}</div>
+              <div className="text-sm text-gray-500">{post?.createdAt}</div>
+            </div>
+          </div>
+
+          <div className="font-bold py-1">{post?.content}</div>
         </div>
       </Link>
-      <b className="Post__title">{post?.content}</b>
-      {post?.imageUrl && <img src={post?.imageUrl} width={100} height={100} alt="post img" />}
-      <div className="Post__utils-box">
+
+      {post?.imageUrl && (
+        <div className="p-4">
+          <img src={post?.imageUrl} className="w-full h-auto rounded-xl border border-slate-100" alt="post img" />
+        </div>
+      )}
+      <div className="px-4 mt-2">
         {user?.uid === post?.uid && (
-          <>
-            <div role="presentation" className="Post__delete" onClick={handleDelete}>
+          <div className="text-sm flex gap-2 flex-row-reverse">
+            <button type="button" className="cursor-pointer text-black hover:text-red-600 focus:text-red-600" onClick={handleDelete}>
               삭제
-            </div>
-            <div className="Post__edit">
+            </button>
+            <button type="button" className="text-gray-600 hover:text-black focus:text-black">
               <Link to={`/posts/edit/${post?.id}`}>수정</Link>
-            </div>
-          </>
+            </button>
+          </div>
         )}
       </div>
-      <hr />
     </div>
   );
 }
